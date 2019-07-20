@@ -1,20 +1,13 @@
 # frozen_string_literal: true
 
+require 'set'
+
 class LogParser
-  PATH_REGEX = %r{(?<path>[^ ]+)}.freeze
-  ADDRESS_REGEX = %r{(?<address>(\d{1,3}\.){3}\d{1,3})}.freeze
-  VISIT_REGEX = %r{#{PATH_REGEX} #{ADDRESS_REGEX}}.freeze
+  PATH_REGEX = /(?<path>[^ ]+)/.freeze
+  ADDRESS_REGEX = /(?<address>(\d{1,3}\.){3}\d{1,3})/.freeze
+  VISIT_REGEX = /#{PATH_REGEX} #{ADDRESS_REGEX}/.freeze
 
   class InvalidFormat < StandardError; end
-
-  Visit = Struct.new(:address, :ips, :count, :unique_count) do
-    def initialize(*args)
-      super
-      self.ips ||= Set.new
-      self.count ||= 0
-      self.unique_count ||= 0
-    end
-  end
 
   def initialize(logfile_path)
     @logfile_path = logfile_path
@@ -30,7 +23,7 @@ class LogParser
 
   def parse
     File.foreach(logfile_path)
-      .map(&method(:parse_visit))
+        .map(&method(:parse_visit))
     visits_data.values
   end
 
@@ -41,14 +34,11 @@ class LogParser
     count_visit(match[:path], match[:address])
   end
 
-  def count_visit(path, address)
-    visit = visits_data[path]
-    visit.unique_count += 1 unless visit.ips.include?(address)
-    visit.count += 1
-    visit.ips.add(address)
+  def count_visit(path, ip)
+    visits_data[path].count_visitor(ip)
   end
 
   def visits_data
-    @visits_data ||= Hash.new { |hash, key| hash[key] = Visit.new(key) }
+    @visits_data ||= Hash.new { |hash, key| hash[key] = Visit.new(address: key, ips: Set.new) }
   end
 end

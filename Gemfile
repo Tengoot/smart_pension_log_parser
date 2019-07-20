@@ -12,5 +12,6 @@ gem 'rubocop-rspec', require: false
 # Code coverage for Ruby 1.9+ with a powerful configuration library
 gem 'simplecov'
 
+gem 'dry-struct'
 gem 'pry'
 gem 'pry-doc'
