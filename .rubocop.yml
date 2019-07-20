@@ -9,3 +9,5 @@ Metrics/BlockLength:
 Metrics/LineLength:
   Max: 100
   IgnoreCopDirectives: true
+Style/Documentation:
+  Enabled: false
