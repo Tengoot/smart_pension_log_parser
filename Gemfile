@@ -11,7 +11,9 @@ gem 'rubocop', require: false
 gem 'rubocop-rspec', require: false
 # Code coverage for Ruby 1.9+ with a powerful configuration library
 gem 'simplecov'
-
+# Typed struct and value objects
 gem 'dry-struct'
+# A runtime developer console and IRB alternative with powerful introspection capabilities.
 gem 'pry'
+# Provide MRI Core documentation and source code for the Pry REPL
 gem 'pry-doc'
